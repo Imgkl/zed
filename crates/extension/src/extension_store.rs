@@ -9,9 +9,7 @@ use async_tar::Archive;
 use client::ClientSettings;
 use collections::{BTreeMap, HashSet};
 use fs::{Fs, RemoveOptions};
-use futures::channel::mpsc::unbounded;
-use futures::StreamExt as _;
-use futures::{io::BufReader, AsyncReadExt as _};
+use futures::{channel::mpsc::unbounded, io::BufReader, AsyncReadExt as _, StreamExt as _};
 use gpui::{actions, AppContext, Context, Global, Model, ModelContext, Task};
 use language::{
     LanguageConfig, LanguageMatcher, LanguageQueries, LanguageRegistry, QUERY_FILENAME_PREFIXES,
@@ -20,8 +18,8 @@ use node_runtime::NodeRuntime;
 use parking_lot::RwLock;
 use serde::{Deserialize, Serialize};
 use settings::Settings as _;
-use std::cmp::Ordering;
 use std::{
+    cmp::Ordering,
     ffi::OsStr,
     path::{Path, PathBuf},
     sync::Arc,
@@ -169,7 +167,7 @@ impl ExtensionStore {
             extensions_being_installed: Default::default(),
             extensions_being_uninstalled: Default::default(),
             reload_task: None,
-            wasm_host: WasmHost::new(http_client.clone(), node_runtime),
+            wasm_host: WasmHost::new(fs.clone(), http_client.clone(), node_runtime),
             wasm_extensions: Vec::new(),
             needs_reload: false,
             extension_changes: ExtensionChanges::default(),
